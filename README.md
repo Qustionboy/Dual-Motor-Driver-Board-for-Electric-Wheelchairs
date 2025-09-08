@@ -11,10 +11,7 @@ The hardware design is provided in two equivalent formats: **Altium Designer** a
 ---
 
 ## Hardware
-The PCB design incorporates all necessary schematics and layout information, along with a detailed BOM. Two integrated development environments are supported:
-
-- **Altium Designer** – recommended for advanced design modifications.  
-- **JLCEDA** – suitable for rapid prototyping and free online access.  
+The PCB design incorporates all necessary schematics and layout information, along with a detailed BOM. Two integrated development environments are supported.
 
 ---
 
