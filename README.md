@@ -26,10 +26,25 @@ The firmware is written in **STM32CubeIDE**, which is required for compilation a
 
 ### Serial Output
 - When using **ST-Link**, the UART interface can be employed as a serial monitor to observe program output.  
-- When using **USB**, serial monitoring is also possible, but requires modification of the following function:  
+- When using **USB**, serial monitoring is also possible, but requires replacement of the function `int _write(int fd, const char *p, int len);`.  
+Since the USB CDC middleware has already been configured in CubeMX (IOC file completed), only the program code needs to be modified. Replace the default UART redirection with the following:
 
 ```c
-int _write(int fd, const char *p, int len);
+int _write(int fd, const char *p, int len) {
+    if (fd == STDOUT_FILENO || fd == STDERR_FILENO) {
+        if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED) {
+            return 0; // USB not ready
+        }
+        if (CDC_Transmit_FS((uint8_t*)p, len) == USBD_OK) {
+            return len;
+        } else {
+            return 0; // Busy, discard to avoid blocking
+        }
+    }
+    return 0;
+}
+
+
 ```
 
 ---
